@@ -1,9 +1,9 @@
-package com.sandaru.blue_bird_vacation_planner.repository.Impl;
+package com.sandaru.blue_bird_vacation_planner.repository;
 
 import com.sandaru.blue_bird_vacation_planner.entity.Administrator;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserDetailsRepositoryImpl extends JpaRepository<Administrator, Long> {
+public interface UserDetailsRepository extends JpaRepository<Administrator, Long> {
 
     public Administrator findByUsername(String username);
 

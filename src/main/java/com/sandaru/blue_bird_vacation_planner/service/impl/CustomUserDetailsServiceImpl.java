@@ -1,7 +1,7 @@
-package com.sandaru.blue_bird_vacation_planner.service;
+package com.sandaru.blue_bird_vacation_planner.service.impl;
 
 import com.sandaru.blue_bird_vacation_planner.entity.Administrator;
-import com.sandaru.blue_bird_vacation_planner.repository.Impl.UserDetailsRepositoryImpl;
+import com.sandaru.blue_bird_vacation_planner.repository.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserDetailsRepositoryImpl userRepository;
+    private final UserDetailsRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -23,7 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
-        // return useedetails object with username, password, and roles
         return User.builder()
                 .username(admin.getUsername())
                 .password(admin.getPassword())

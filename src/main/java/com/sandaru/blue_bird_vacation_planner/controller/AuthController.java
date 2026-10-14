@@ -1,26 +1,35 @@
 package com.sandaru.blue_bird_vacation_planner.controller;
 
-import com.sandaru.blue_bird_vacation_planner.models.LogInResponse;
-import com.sandaru.blue_bird_vacation_planner.models.LoginRequest;
+import com.sandaru.blue_bird_vacation_planner.dto.PasswordUpdateRequest;
+import com.sandaru.blue_bird_vacation_planner.dto.LogInResponse;
+import com.sandaru.blue_bird_vacation_planner.dto.LoginRequest;
 import com.sandaru.blue_bird_vacation_planner.service.AuthService;
-import com.sandaru.blue_bird_vacation_planner.service.impl.AuthServiceImpl;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authService;
+    private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<LogInResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LogInResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LogInResponse response = authService.authenticateUser(loginRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update-password")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<LogInResponse> updatePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @Valid @RequestBody PasswordUpdateRequest request) {
+
+        LogInResponse response = authService.updatePassword(authHeader, request);
         return ResponseEntity.ok(response);
     }
 }

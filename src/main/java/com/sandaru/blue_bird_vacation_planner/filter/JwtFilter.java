@@ -1,6 +1,6 @@
 package com.sandaru.blue_bird_vacation_planner.filter;
 
-import com.sandaru.blue_bird_vacation_planner.service.jwtService;
+import com.sandaru.blue_bird_vacation_planner.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final jwtService jwtService;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
     @Override

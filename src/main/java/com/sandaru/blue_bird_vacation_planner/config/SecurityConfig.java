@@ -2,24 +2,35 @@ package com.sandaru.blue_bird_vacation_planner.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.sandaru.blue_bird_vacation_planner.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserDetailsService customUserDetailsService;
+    private final JwtFilter jwtFilter;
+
+    public SecurityConfig(UserDetailsService customUserDetailsService, JwtFilter jwtFilter) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtFilter = jwtFilter;
+    }
 
     /**
      * 1. Expose the AuthenticationManager
@@ -47,6 +58,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // Automatically picks up your CorsConfig bean!
+                .cors(Customizer.withDefaults())
+
                 // Disable CSRF because we are using token-based authentication, not cookies
                 .csrf(csrf -> csrf.disable())
 
@@ -56,18 +70,22 @@ public class SecurityConfig {
 
                 // Define URL access rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/health").permitAll()
+                        // 1. Public Auth & Health Endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers("/api/health").permitAll()
 
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/destinations/**").permitAll()
-
+                        // 2. Swagger UI & OpenAPI Docs
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                        // Require authentication for EVERYTHING else (like POST/PUT/DELETE destinations)
+                        // 3. Public Tourist Endpoints (Viewing places, checking weather, calculating routes)
+                        .requestMatchers(HttpMethod.GET, "/api/destinations/**", "/api/dining/nearby/**", "/api/weather/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/route/calculate").permitAll()
+
+                        // 4. Everything else requires a valid JWT token; @PreAuthorize on the controllers checks the ADMIN role
                         .anyRequest().authenticated()
                 );
 
-        // Note: You will later add your custom JwtRequestFilter here using:
-        // http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

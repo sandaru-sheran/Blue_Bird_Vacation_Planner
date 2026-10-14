@@ -1,4 +1,4 @@
-package com.sandaru.blue_bird_vacation_planner.models;
+package com.sandaru.blue_bird_vacation_planner.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
