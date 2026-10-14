@@ -3,6 +3,7 @@ package com.sandaru.blue_bird_vacation_planner.service;
 import com.sandaru.blue_bird_vacation_planner.models.LogInResponse;
 import com.sandaru.blue_bird_vacation_planner.models.LoginRequest;
 import com.sandaru.blue_bird_vacation_planner.service.impl.AuthServiceImpl;
+import com.sandaru.blue_bird_vacation_planner.service.impl.jwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,8 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService implements AuthServiceImpl {
     private final AuthenticationManager authenticationManager;
-    private final JwtServise jwtServise;
-
+    private final jwtServiceImpl jwtServise;
 
 
     @Override
@@ -28,7 +28,7 @@ public class AuthService implements AuthServiceImpl {
         );
 
         // 2. Generate the token
-        String jwt = jwtServise.generateJwtToken(authentication);
+        String jwt = jwtServise.generateToken(authentication.getName());
 
         // 3. Return the data object
         return new LogInResponse(jwt, loginRequest.getUsername());

@@ -3,6 +3,7 @@ package com.sandaru.blue_bird_vacation_planner.controller;
 import com.sandaru.blue_bird_vacation_planner.models.LogInResponse;
 import com.sandaru.blue_bird_vacation_planner.models.LoginRequest;
 import com.sandaru.blue_bird_vacation_planner.service.AuthService;
+import com.sandaru.blue_bird_vacation_planner.service.impl.AuthServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;

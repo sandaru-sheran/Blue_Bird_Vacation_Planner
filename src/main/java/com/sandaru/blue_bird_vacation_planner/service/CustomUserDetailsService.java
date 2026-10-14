@@ -19,11 +19,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Administrator admin = userRepository.findByUsername(username);
 
+        if (admin == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+
         // return useedetails object with username, password, and roles
         return User.builder()
                 .username(admin.getUsername())
                 .password(admin.getPassword())
-                .roles("ADMIN") // Dynamically assigns the required role for route protection
+                .roles(admin.getRole())
                 .build();
     }
 }

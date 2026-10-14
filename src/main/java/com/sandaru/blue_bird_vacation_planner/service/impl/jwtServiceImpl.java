@@ -1,6 +1,6 @@
 package com.sandaru.blue_bird_vacation_planner.service.impl;
 
-public interface jwtServiseImpl {
+public interface jwtServiceImpl {
 
     public String generateToken(String username);
 
