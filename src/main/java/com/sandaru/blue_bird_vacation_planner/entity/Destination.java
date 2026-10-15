@@ -3,9 +3,13 @@ package com.sandaru.blue_bird_vacation_planner.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -37,6 +41,17 @@ public class Destination {
     @Column(name = "closing_hour", nullable = false)
     private LocalTime closingHour;
 
-    @Column(name = "dining_insights", columnDefinition = "TEXT")
-    private String diningInsights;
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<DiningInsight> diningInsights = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(
+            name = "destination_images",
+            joinColumns = @JoinColumn(name = "destination_id")
+    )
+    @Column(name = "image_url")
+    private List<String> imageUrls = new ArrayList<>();
+
 }

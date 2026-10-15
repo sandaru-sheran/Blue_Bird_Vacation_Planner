@@ -2,12 +2,15 @@ package com.sandaru.blue_bird_vacation_planner.dto;
 
 import com.sandaru.blue_bird_vacation_planner.entity.DiningInsight;
 
+import java.util.List;
+
 public record DiningInsightResponse(
         Long id,
         String restaurantName,
         String priceRange,
         String recommendedDishes,
-        Long destinationId
+        Long destinationId,
+        List<String>imageUrls
 ) {
     public static DiningInsightResponse from(DiningInsight insight) {
         return new DiningInsightResponse(
@@ -15,7 +18,8 @@ public record DiningInsightResponse(
                 insight.getRestaurantName(),
                 insight.getPriceRange(),
                 insight.getRecommendedDishes(),
-                insight.getDestination().getId()
+                insight.getDestination().getId(),
+                insight.getImageUrls()
         );
     }
 }

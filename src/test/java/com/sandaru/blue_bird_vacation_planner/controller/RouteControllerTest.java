@@ -48,17 +48,18 @@ class RouteControllerTest {
     @DisplayName("POST /api/route/calculate - Valid 2+ Destinations (200 OK)")
     void calculateRoute_WithValidDestinationIds_ReturnsRouteResponse() throws Exception {
         List<Long> destinationIds = List.of(1L, 2L, 3L);
-        RouteCalculationRequest request = new RouteCalculationRequest(destinationIds);
+        RouteCalculationRequest request = new RouteCalculationRequest(destinationIds, null);
 
         DayPlanRouteResponse mockResponse = new DayPlanRouteResponse(
                 3600,
                 12500,
                 "encoded_polyline_string",
                 List.of(0),
+                List.of(),
                 "{\"routes\":[]}"
         );
 
-        when(routeService.calculateDayPlanRoute(destinationIds)).thenReturn(mockResponse);
+        when(routeService.calculateDayPlanRoute(request)).thenReturn(mockResponse);
 
         mockMvc.perform(post("/api/route/calculate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +71,7 @@ class RouteControllerTest {
     @Test
     @DisplayName("POST /api/route/calculate - Fewer Than 2 Destinations Fails Validation (400 Bad Request)")
     void calculateRoute_WithSingleDestination_ReturnsBadRequest() throws Exception {
-        RouteCalculationRequest invalidRequest = new RouteCalculationRequest(List.of(1L));
+        RouteCalculationRequest invalidRequest = new RouteCalculationRequest(List.of(1L), null);
 
         mockMvc.perform(post("/api/route/calculate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,9 +83,9 @@ class RouteControllerTest {
     @DisplayName("POST /api/route/calculate - Missing Destination Throws IllegalArgumentException (400 Bad Request)")
     void calculateRoute_WithNonExistentDestination_ReturnsBadRequest() throws Exception {
         List<Long> ids = List.of(1L, 999L);
-        RouteCalculationRequest request = new RouteCalculationRequest(ids);
+        RouteCalculationRequest request = new RouteCalculationRequest(ids, null);
 
-        when(routeService.calculateDayPlanRoute(ids))
+        when(routeService.calculateDayPlanRoute(request))
                 .thenThrow(new IllegalArgumentException("Destination not found with ID: 999"));
 
         mockMvc.perform(post("/api/route/calculate")

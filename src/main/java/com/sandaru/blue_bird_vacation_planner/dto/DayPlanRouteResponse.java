@@ -13,5 +13,6 @@ public class DayPlanRouteResponse {
     private int totalDistanceMeters;
     private String overviewPolyline;
     private List<Integer> optimizedWaypointOrder; // Added this field
+    private List<RouteSegmentDetail> segmentDetails;
     private String rawJsonResponse;
 }

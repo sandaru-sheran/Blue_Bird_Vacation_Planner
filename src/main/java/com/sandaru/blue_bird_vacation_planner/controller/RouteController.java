@@ -21,7 +21,7 @@ public class RouteController {
     @PostMapping("/calculate")
     public ResponseEntity<DayPlanRouteResponse> post(@Valid @RequestBody RouteCalculationRequest request) throws Exception {
 
-        DayPlanRouteResponse routeResponse = routeService.calculateDayPlanRoute(request.destinationIds());
+        DayPlanRouteResponse routeResponse = routeService.calculateDayPlanRoute(request);
         return ResponseEntity.ok(routeResponse);
     }
 }

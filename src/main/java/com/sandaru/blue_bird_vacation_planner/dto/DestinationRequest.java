@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public record DestinationRequest(
         @NotBlank(message = "Destination name is required")
@@ -34,8 +35,8 @@ public record DestinationRequest(
         @NotNull(message = "Closing hour is required")
         LocalTime closingHour,
 
-        @Size(max = 2000, message = "Dining insights cannot exceed 2000 characters")
-        String diningInsights
+        @Size(max = 5, message = "You can only upload up to 5 images")
+        List<String> imageUrls
 ) {
     // Automatically validates that closingHour is after openingHour
     @AssertTrue(message = "Closing hour must be after opening hour")

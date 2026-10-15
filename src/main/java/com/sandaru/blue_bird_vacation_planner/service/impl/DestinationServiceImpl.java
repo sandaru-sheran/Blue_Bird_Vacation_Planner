@@ -46,7 +46,9 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setLongitude(request.longitude());
         destination.setOpeningHour(request.openingHour());
         destination.setClosingHour(request.closingHour());
-        destination.setDiningInsights(request.diningInsights());
+        if (request.imageUrls() != null) {
+            destination.setImageUrls(request.imageUrls());
+        }
         return DestinationResponse.from(destinationRepository.save(destination));
     }
 
@@ -70,7 +72,9 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setLongitude(request.longitude());
         destination.setOpeningHour(request.openingHour());
         destination.setClosingHour(request.closingHour());
-        destination.setDiningInsights(request.diningInsights());
+        if (request.imageUrls() != null) {
+            destination.setImageUrls(request.imageUrls());
+        }
         return destination;
     }
 

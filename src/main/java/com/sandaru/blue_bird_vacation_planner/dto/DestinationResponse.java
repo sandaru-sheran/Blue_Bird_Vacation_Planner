@@ -4,6 +4,7 @@ import com.sandaru.blue_bird_vacation_planner.entity.Destination;
 import com.sandaru.blue_bird_vacation_planner.entity.DestinationCategory;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public record DestinationResponse(
         Long id,
@@ -13,7 +14,8 @@ public record DestinationResponse(
         Double longitude,
         LocalTime openingHour,
         LocalTime closingHour,
-        String diningInsights
+        List<DiningInsightResponse> diningInsights,
+        List<String> imageUrls
 ) {
     public static DestinationResponse from(Destination destination) {
         return new DestinationResponse(
@@ -24,7 +26,12 @@ public record DestinationResponse(
                 destination.getLongitude(),
                 destination.getOpeningHour(),
                 destination.getClosingHour(),
-                destination.getDiningInsights()
+                destination.getDiningInsights() == null
+                        ? List.of()
+                        : destination.getDiningInsights().stream().map(DiningInsightResponse::from).toList(),
+                destination.getImageUrls() == null
+                        ? List.of()
+                        : destination.getImageUrls()
         );
     }
 }

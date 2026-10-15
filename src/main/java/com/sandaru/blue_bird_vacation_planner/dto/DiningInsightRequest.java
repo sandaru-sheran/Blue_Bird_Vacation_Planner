@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public record DiningInsightRequest(
         @NotBlank(message = "Restaurant name is required")
         @Size(max = 150, message = "Restaurant name cannot exceed 150 characters")
@@ -18,6 +20,9 @@ public record DiningInsightRequest(
 
         @NotNull(message = "Destination ID is required")
         @Positive(message = "Destination ID must be a positive number")
-        Long destinationId
+        Long destinationId,
+
+        @Size(max = 5, message = "You can only upload up to 5 images")
+        List<String> imageUrls
 ) {
 }
