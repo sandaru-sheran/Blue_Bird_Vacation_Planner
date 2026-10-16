@@ -35,7 +35,7 @@ public record DestinationRequest(
         @NotNull(message = "Closing hour is required")
         LocalTime closingHour,
 
-        @Size(max = 5, message = "You can only upload up to 5 images")
+        @Size(max = 10, message = "You can only upload up to 10 images")
         List<String> imageUrls
 ) {
     // Automatically validates that closingHour is after openingHour

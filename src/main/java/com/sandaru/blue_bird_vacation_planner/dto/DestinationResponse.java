@@ -2,6 +2,7 @@ package com.sandaru.blue_bird_vacation_planner.dto;
 
 import com.sandaru.blue_bird_vacation_planner.entity.Destination;
 import com.sandaru.blue_bird_vacation_planner.entity.DestinationCategory;
+import com.sandaru.blue_bird_vacation_planner.entity.DestinationImage;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -29,9 +30,9 @@ public record DestinationResponse(
                 destination.getDiningInsights() == null
                         ? List.of()
                         : destination.getDiningInsights().stream().map(DiningInsightResponse::from).toList(),
-                destination.getImageUrls() == null
+                destination.getImages() == null
                         ? List.of()
-                        : destination.getImageUrls()
+                        : destination.getImages().stream().map(DestinationImage::getImageUrl).toList()
         );
     }
 }

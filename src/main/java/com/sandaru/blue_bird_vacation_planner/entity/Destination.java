@@ -46,12 +46,8 @@ public class Destination {
     @EqualsAndHashCode.Exclude
     private List<DiningInsight> diningInsights = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(
-            name = "destination_images",
-            joinColumns = @JoinColumn(name = "destination_id")
-    )
-    @Column(name = "image_url")
-    private List<String> imageUrls = new ArrayList<>();
-
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<DestinationImage> images = new ArrayList<>();
 }

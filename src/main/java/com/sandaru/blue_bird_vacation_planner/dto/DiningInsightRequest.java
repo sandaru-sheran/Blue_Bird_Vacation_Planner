@@ -22,7 +22,7 @@ public record DiningInsightRequest(
         @Positive(message = "Destination ID must be a positive number")
         Long destinationId,
 
-        @Size(max = 5, message = "You can only upload up to 5 images")
+        @Size(max = 10, message = "You can only upload up to 10 images")
         List<String> imageUrls
 ) {
 }

@@ -12,7 +12,7 @@ public class DayPlanRouteResponse {
     private int finalOptimizedTimeSeconds;
     private int totalDistanceMeters;
     private String overviewPolyline;
-    private List<Integer> optimizedWaypointOrder; // Added this field
+    private List<Long> optimizedWaypointOrder;
     private List<RouteSegmentDetail> segmentDetails;
     private String rawJsonResponse;
 }

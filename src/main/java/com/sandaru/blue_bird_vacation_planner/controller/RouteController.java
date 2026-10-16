@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLOutput;
+
 @RestController
 @RequestMapping("/api/route")
 @RequiredArgsConstructor
@@ -21,7 +23,11 @@ public class RouteController {
     @PostMapping("/calculate")
     public ResponseEntity<DayPlanRouteResponse> post(@Valid @RequestBody RouteCalculationRequest request) throws Exception {
 
+        System.out.println("Received request: " + request);
+
         DayPlanRouteResponse routeResponse = routeService.calculateDayPlanRoute(request);
+
+        System.out.println("Calculated route response: " + routeResponse.getOptimizedWaypointOrder());
         return ResponseEntity.ok(routeResponse);
     }
 }

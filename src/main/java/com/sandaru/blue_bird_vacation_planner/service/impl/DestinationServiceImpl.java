@@ -4,6 +4,7 @@ import com.sandaru.blue_bird_vacation_planner.dto.DestinationRequest;
 import com.sandaru.blue_bird_vacation_planner.dto.DestinationResponse;
 import com.sandaru.blue_bird_vacation_planner.entity.Destination;
 import com.sandaru.blue_bird_vacation_planner.entity.DestinationCategory;
+import com.sandaru.blue_bird_vacation_planner.entity.DestinationImage;
 import com.sandaru.blue_bird_vacation_planner.repository.DestinationRepository;
 import com.sandaru.blue_bird_vacation_planner.service.DestinationService;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +47,22 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setLongitude(request.longitude());
         destination.setOpeningHour(request.openingHour());
         destination.setClosingHour(request.closingHour());
+
         if (request.imageUrls() != null) {
-            destination.setImageUrls(request.imageUrls());
+            destination.getImages().clear();
+
+            List<DestinationImage> newImages = request.imageUrls().stream()
+                    .map(url -> {
+                        DestinationImage img = new DestinationImage();
+                        img.setImageUrl(url);
+                        img.setDestination(destination);
+                        return img;
+                    })
+                    .toList();
+
+            destination.getImages().addAll(newImages);
         }
+
         return DestinationResponse.from(destinationRepository.save(destination));
     }
 
@@ -73,7 +87,16 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setOpeningHour(request.openingHour());
         destination.setClosingHour(request.closingHour());
         if (request.imageUrls() != null) {
-            destination.setImageUrls(request.imageUrls());
+            destination.getImages().clear();
+            List<DestinationImage> newImages = request.imageUrls().stream()
+                    .map(url -> {
+                        DestinationImage img = new DestinationImage();
+                        img.setImageUrl(url);
+                        img.setDestination(destination);
+                        return img;
+                    })
+                    .toList();
+            destination.getImages().addAll(newImages);
         }
         return destination;
     }
